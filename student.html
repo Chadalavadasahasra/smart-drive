@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Student Performance</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <header>
+
+        <h1>🎓 Student Performance</h1>
+
+        <a href="/">
+            ← Back to Drive
+        </a>
+
+    </header>
+
+
+    {% if error %}
+
+        <div class="error">
+
+            {{ error }}
+
+        </div>
+
+    {% else %}
+
+
+        <h2>
+            {{ filename }}
+        </h2>
+
+
+        <table>
+
+
+            <tr>
+
+                <th>
+                    Student
+                </th>
+
+                <th>
+                    Attendance
+                </th>
+
+                <th>
+                    Average Score
+                </th>
+
+                <th>
+                    Status
+                </th>
+
+            </tr>
+
+
+            {% for student in students %}
+
+
+            <tr>
+
+                <td>
+                    {{ student.name }}
+                </td>
+
+                <td>
+                    {{ student.attendance }}%
+                </td>
+
+                <td>
+                    {{ student.score }}%
+                </td>
+
+                <td>
+
+                    <strong>
+
+                        {{ student.status }}
+
+                    </strong>
+
+                </td>
+
+            </tr>
+
+
+            {% endfor %}
+
+
+        </table>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

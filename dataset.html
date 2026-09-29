@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Dataset Analyzer</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <header>
+
+        <h1>📊 Dataset Analyzer</h1>
+
+        <a href="/">
+            ← Back to Drive
+        </a>
+
+    </header>
+
+
+    {% if error %}
+
+        <div class="error">
+
+            {{ error }}
+
+        </div>
+
+    {% else %}
+
+
+        <h2>
+            {{ filename }}
+        </h2>
+
+
+        <div class="stats">
+
+
+            <div>
+
+                <h3>
+                    Rows
+                </h3>
+
+                <strong>
+                    {{ rows }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Columns
+                </h3>
+
+                <strong>
+                    {{ columns }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+        <h2>
+            Columns
+        </h2>
+
+
+        <div class="tags">
+
+            {% for column in column_names %}
+
+                <span>
+                    {{ column }}
+                </span>
+
+            {% endfor %}
+
+        </div>
+
+
+        <h2>
+            Numeric Averages
+        </h2>
+
+
+        <table>
+
+            <tr>
+
+                <th>
+                    Column
+                </th>
+
+                <th>
+                    Average
+                </th>
+
+            </tr>
+
+
+            {% for column, average in averages.items() %}
+
+            <tr>
+
+                <td>
+                    {{ column }}
+                </td>
+
+                <td>
+                    {{ average }}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+
+        <h2>
+            Data Preview
+        </h2>
+
+
+        <div class="table-container">
+
+            {{ preview | safe }}
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

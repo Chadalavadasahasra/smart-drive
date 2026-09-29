@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Resume Screening - Smart Drive</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <h2>☁ Smart Drive</h2>
+
+        <p class="logged-user">
+            👤 {{ username }}
+        </p>
+
+        <a href="/">🏠 My Drive</a>
+
+        <a href="/recent">🕒 Recent</a>
+
+        <a href="/starred">⭐ Starred</a>
+
+        <a href="/trash">🗑️ Trash</a>
+
+        <hr>
+
+        <a href="/screen" class="active">
+            🤖 Resume Screening
+        </a>
+
+        <a href="/dataset">
+            📊 Dataset Analyzer
+        </a>
+
+        <a href="/student">
+            🎓 Student Performance
+        </a>
+
+        <hr>
+
+        <a href="/logout">
+            🚪 Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <div class="top-bar">
+
+            <div>
+
+                <h1>Resume Screening</h1>
+
+                <p>
+                    Data Analyst Profile
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="resume-container">
+
+            <div class="resume-upload-card">
+
+                <h2>📄 Upload Resume</h2>
+
+                <p>
+                    Upload a candidate's PDF or DOCX resume
+                    to compare it with the Data Analyst profile.
+                </p>
+
+                <form
+                    action="/analyze-resume"
+                    method="POST"
+                    enctype="multipart/form-data"
+                >
+
+                    <input
+                        type="file"
+                        name="resume"
+                        accept=".pdf,.docx"
+                        required
+                    >
+
+                    <button type="submit">
+                        🔍 Analyze Resume
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="error-box">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            {% if overall_score is defined %}
+
+            <!-- RESULT -->
+
+            <div class="resume-result">
+
+                <div class="result-header">
+
+                    <div>
+
+                        <h2>{{ filename }}</h2>
+
+                        <p>Data Analyst Profile Match</p>
+
+                    </div>
+
+                    <div class="score-circle">
+
+                        {{ overall_score }}%
+
+                    </div>
+
+                </div>
+
+
+                <div class="result-status">
+
+                    {{ result }}
+
+                </div>
+
+
+                <!-- SCORE CARDS -->
+
+                <div class="score-grid">
+
+                    <div class="score-card">
+
+                        <h3>Skills</h3>
+
+                        <strong>
+                            {{ skill_score }}%
+                        </strong>
+
+                    </div>
+
+                    <div class="score-card">
+
+                        <h3>Keywords</h3>
+
+                        <strong>
+                            {{ keyword_score }}%
+                        </strong>
+
+                    </div>
+
+                    <div class="score-card">
+
+                        <h3>Education</h3>
+
+                        <strong>
+                            {{ education_score }}%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MATCHED SKILLS -->
+
+                <div class="skill-section">
+
+                    <h3>✅ Matched Skills</h3>
+
+                    <div class="skill-tags">
+
+                        {% for skill in matched_skills %}
+
+                        <span class="skill-tag matched">
+                            {{ skill }}
+                        </span>
+
+                        {% endfor %}
+
+                        {% if not matched_skills %}
+
+                        <p>No required skills found.</p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- MISSING SKILLS -->
+
+                <div class="skill-section">
+
+                    <h3>❌ Missing Skills</h3>
+
+                    <div class="skill-tags">
+
+                        {% for skill in missing_skills %}
+
+                        <span class="skill-tag missing">
+                            {{ skill }}
+                        </span>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- KEYWORDS -->
+
+                <div class="skill-section">
+
+                    <h3>📊 Relevant Profile Keywords</h3>
+
+                    <div class="skill-tags">
+
+                        {% for keyword in matched_keywords %}
+
+                        <span class="skill-tag matched">
+                            {{ keyword }}
+                        </span>
+
+                        {% endfor %}
+
+                        {% if not matched_keywords %}
+
+                        <p>
+                            No relevant keywords detected.
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

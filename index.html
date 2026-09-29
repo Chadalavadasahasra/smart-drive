@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Smart Drive</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <h2>☁ Smart Drive</h2>
+
+        <p class="logged-user">
+            👤 {{ username }}
+        </p>
+
+        <a href="/" class="{% if page == 'My Drive' %}active{% endif %}">
+            🏠 My Drive
+        </a>
+
+        <a href="/recent"
+           class="{% if page == 'Recent' %}active{% endif %}">
+            🕒 Recent
+        </a>
+
+        <a href="/starred"
+           class="{% if page == 'Starred' %}active{% endif %}">
+            ⭐ Starred
+        </a>
+
+        <a href="/trash"
+           class="{% if page == 'Trash' %}active{% endif %}">
+            🗑️ Trash
+        </a>
+
+        <hr>
+
+        <a href="/screen">
+            🤖 Resume Screening
+        </a>
+
+        <a href="/dataset">
+            📊 Dataset Analyzer
+        </a>
+
+        <a href="/student">
+            🎓 Student Performance
+        </a>
+
+        <hr>
+
+        <a href="/logout">
+            🚪 Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <div class="top-bar">
+
+            <div>
+
+                <h1>{{ page }}</h1>
+
+            </div>
+
+            {% if not trash %}
+
+            <form
+                action="/upload"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <input
+                    type="file"
+                    name="file"
+                    required
+                >
+
+                <button type="submit">
+                    ⬆ Upload
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if error %}
+
+        <div class="error-box">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        {% if files %}
+
+        <div class="file-grid">
+
+            {% for file in files %}
+
+            <div class="file-card">
+
+                {% if file.name.lower().endswith('.pdf') %}
+
+                    <div class="file-icon">📕</div>
+
+                {% elif file.name.lower().endswith('.csv') %}
+
+                    <div class="file-icon">📊</div>
+
+                {% elif file.name.lower().endswith('.docx') %}
+
+                    <div class="file-icon">📘</div>
+
+                {% elif file.name.lower().endswith(('.jpg', '.jpeg', '.png')) %}
+
+                    <div class="file-icon">🖼️</div>
+
+                {% else %}
+
+                    <div class="file-icon">📄</div>
+
+                {% endif %}
+
+
+                <h3>{{ file.name }}</h3>
+
+
+                {% if trash %}
+
+                <div class="file-actions">
+
+                    <a href="/restore/{{ file.name }}">
+                        ♻ Restore
+                    </a>
+
+                    <a href="/delete-forever/{{ file.name }}">
+                        ❌ Delete Forever
+                    </a>
+
+                </div>
+
+                {% else %}
+
+                <div class="file-actions">
+
+                    <a href="/download/{{ file.name }}">
+                        ⬇ Download
+                    </a>
+
+                    <a href="/star/{{ file.name }}">
+
+                        {% if file.starred %}
+
+                            ⭐ Unstar
+
+                        {% else %}
+
+                            ☆ Star
+
+                        {% endif %}
+
+                    </a>
+
+                    <a href="/delete/{{ file.name }}">
+                        🗑️ Trash
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div>📂</div>
+
+            <h2>No files here</h2>
+
+            <p>
+                Upload a file to get started.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
